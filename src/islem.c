@@ -17,28 +17,52 @@ int sayi_mi(const char *girdi) {
 }
 
 int bosluklari_sil(char *girdi) {
-    size_t l = strlen(girdi);
-    char *tmp = malloc(sizeof(char) * l);
-    char *c = girdi;
-    int i;
-    size_t j = 0;
+    size_t boyut = strlen(girdi);
+    char *gecici = malloc(sizeof(char) * boyut);
+    size_t sonBoyut = 0;
 
-    for (i = 0; i < l; i++) {
-        if (*c == ' ') continue;
+    for (int i = 0; i < boyut; i++) {
+        if (girdi[i] == ' ') continue;
 
-        tmp[j++] = *c;
+        gecici[sonBoyut++] = girdi[i];
     }
 
-    memcpy(girdi, tmp, j);
-    free(tmp);
+    memcpy(girdi, gecici, sonBoyut);
+    free(gecici);
 
-    return j;
+    return sonBoyut;
+}
+
+int gereksiz_bosluklari_temizle(char *girdi) {
+    size_t len = strlen(girdi);
+    int ilk, son;
+
+    for (ilk = 0; ilk < len; ilk++) {
+        if (girdi[ilk] != ' ') break;
+    }
+
+    for (son = len; son > 0; son--) {
+        if (girdi[son] != ' ') break;
+    }
+
+    size_t sonBoyut = (size_t) (son - ilk);
+    char *gecici = malloc(sizeof(char) * len);
+
+    for (int i = 0; i < sonBoyut; i++) {
+        gecici[i] = girdi[ilk + i];
+    }
+
+    memcpy(girdi, gecici, sonBoyut);
+
+    free(gecici);
+    return sonBoyut;
 }
 
 int
-kayda_ekle(const char *anahtar, const char *ad, const char *malzeme, const char *renk, Siparis *siparis, Kayit kayit) {
+kayit_ekle_islemi(const char *anahtar, const char *ad, const char *malzeme, const char *renk, Siparis *siparis,
+                  Kayit kayit) {
     if (sayi_mi(anahtar) != 0)
-        return 1;
+        return ISLEM_HATALI_ANAHTAR;
 
     siparis->anahtar = strtol(anahtar, NULL, 10);
     strcpy(siparis->ad, ad);
@@ -50,12 +74,12 @@ kayda_ekle(const char *anahtar, const char *ad, const char *malzeme, const char 
     return 0;
 }
 
-int kayda_ekle_dosyadan(const char *girdi, Kayit kayit) {
+int kayit_ekle_dosyadan_islemi(const char *girdi, Kayit kayit) {
     char *bosluksuz = strdup(girdi);
 
     if (bosluklari_sil(bosluksuz) < 5 || bosluksuz[3] != '<') {
         free(bosluksuz);
-        return 1;
+        return ISLEM_HATALI_PRO_KOMUTU;
     }
 
     kayit_ekle_dosyadan(kayit, &bosluksuz[4]);
@@ -64,38 +88,83 @@ int kayda_ekle_dosyadan(const char *girdi, Kayit kayit) {
     return 0;
 }
 
+int kayit_ara_islemi(const char *anahtar, Kayit kayit) {
+    if (sayi_mi(anahtar) != 0)
+        return ISLEM_HATALI_ANAHTAR;
+
+    kayit_ara(kayit, strtol(anahtar, NULL, 10));
+
+    return 0;
+}
+
+int kayitlari_yazdir_dosyaya_islemi(const char *dosyaAdi, Kayit kayit) {
+    kayitlari_yazdir_dosyaya(kayit, dosyaAdi);
+
+    return 0;
+}
+
+int kayitlari_yazdir_islemi(Kayit kayit) {
+    kayitlari_yazdir(kayit);
+
+    return 0;
+}
+
 int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
-    int i;
-    char *t, *s = (char *) girdi;
+    char *cizgi, *onceki = (char *) girdi;
     char *bolumler[5];
 
-    for (i = 0; i < 5; i++) bolumler[i] = malloc(sizeof(char) * ISLEM_BOLUM_TAMPON_BOYUTU);
+    for (int i = 0; i < 5; i++) bolumler[i] = malloc(sizeof(char) * ISLEM_BOLUM_TAMPON_BOYUTU);
 
-    for (i = 0; i < 5; i++) {
-        t = strchr(s, '|');
+    int bolumSayisi;
+    for (bolumSayisi = 0; bolumSayisi < 5; bolumSayisi++) {
+        cizgi = strchr(onceki, '|');
 
-        if (t == '\0') break;
+        if (cizgi == '\0') break;
 
-        memcpy(bolumler[i], s, t - s);
-        s = t + 1;
+        memcpy(bolumler[bolumSayisi], onceki, cizgi - onceki);
+        onceki = cizgi + 1;
     }
 
-    if (i < 1)
+    if (bolumSayisi < 1)
         strcpy(bolumler[0], girdi);
     else
-        strcpy(bolumler[i], s);
+        strcpy(bolumler[bolumSayisi], onceki);
 
-    if (strcmp(bolumler[0], "add") == 0) {
-        if (kayda_ekle(bolumler[1], bolumler[2], bolumler[3], bolumler[4], siparis, kayit) != 0)
-            return ISLEM_HATALI_ANAHTAR;
-    } else if (memcmp(bolumler[0], "pro", 3) == 0) {
-        if (kayda_ekle_dosyadan(bolumler[0], kayit) != 0)
-            return ISLEM_HATALI_PRO_KOMUTU;
+    for (int i = 0; i < bolumSayisi; ++i) {
+        gereksiz_bosluklari_temizle(bolumler[i]);
     }
 
-    for (i = 0; i < 5; i++)
-        free(bolumler[i]);
-    free(bolumler);
+    int r = 0;
+    if (strcmp(bolumler[0], "add") == 0) {
+        if (bolumSayisi != 5) return ISLEM_HATALI_EKLE_KOMUTU;
+
+        r = kayit_ekle_islemi(bolumler[1], bolumler[2], bolumler[3], bolumler[4], siparis, kayit);
+    } else if (memcmp(bolumler[0], "pro", 3) == 0) {
+        if (bolumSayisi != 1) return ISLEM_HATALI_PRO_KOMUTU;
+
+        r = kayit_ekle_dosyadan_islemi(bolumler[0], kayit) != 0;
+    } else if (strcmp(bolumler[0], "search") == 0) {
+        if (bolumSayisi != 2) return ISLEM_HATALI_SEARCH_KOMUTU;
+
+        r = kayit_ara_islemi(bolumler[1], kayit);
+    } else if (strcmp(bolumler[0], "write") == 0) {
+        if (bolumSayisi != 2) return ISLEM_HATALI_WRITE_KOMUTU;
+
+        r = kayitlari_yazdir_dosyaya_islemi(bolumler[1], kayit);
+    } else if (strcmp(bolumler[0], "print") == 0) {
+        if (bolumSayisi != 1) return ISLEM_HATALI_PRINT_KOMUTU;
+
+        r = kayitlari_yazdir_islemi(kayit);
+    } else if (strcmp(bolumler[0], "quit") == 0) {
+        if (bolumSayisi != 1) return ISLEM_HATALI_QUIT_KOMUTU;
+
+        r = ISLEM_CIKIS;
+    }
+
+    for (bolumSayisi = 0; bolumSayisi < 5; bolumSayisi++)
+        free(bolumler[bolumSayisi]);
+
+    if (r != 0) return r;
 
     return 0;
 }
