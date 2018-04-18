@@ -10,14 +10,14 @@ typedef struct {
 
 /* Aşağıda bildirilen fonksiyonlar; işlem hatasız tamamlanırsa 1, aksi takdirde 0 döndürürler. */
 
-extern int ekle(Kayit kayit, Siparis siparis);
+extern int kayit_ekle(Kayit kayit, Siparis siparis);
 
-extern int dosyadan_ekle(Kayit kayit, const char *dosyaadi);
+extern int kayit_ekle_dosyadan(Kayit kayit, const char *dosyaadi);
 
-extern int ara(Kayit kayit, int anahtar);
+extern int kayit_ara(Kayit kayit, int anahtar);
 
-extern int dosyaya_yazdir(Kayit kayit);
+extern int kayitlari_yazdir(Kayit kayit);
 
-extern int ekrana_yazdir(Kayit kayit);
+extern int kayitlari_yazdir_dosyaya(Kayit kayit);
 
 #endif //KAYIT_H
