@@ -134,7 +134,7 @@ int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
         gereksiz_bosluklari_temizle(bolumler[i]);
     }
 
-    int r = 0;
+    int r = ISLEM_HATALI_GIRDI;
     if (strcmp(bolumler[0], "add") == 0) {
         if (bolumSayisi != 5) return ISLEM_HATALI_EKLE_KOMUTU;
 
@@ -164,7 +164,5 @@ int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
     for (bolumSayisi = 0; bolumSayisi < 5; bolumSayisi++)
         free(bolumler[bolumSayisi]);
 
-    if (r != 0) return r;
-
-    return 0;
+    return r;
 }
