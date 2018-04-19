@@ -34,25 +34,26 @@ int bosluklari_sil(char *girdi) {
 }
 
 int gereksiz_bosluklari_temizle(char *girdi) {
-    size_t len = strlen(girdi);
+    size_t boyut = strlen(girdi);
     int ilk, son;
 
-    for (ilk = 0; ilk < len; ilk++) {
+    for (ilk = 0; ilk < boyut; ilk++) {
         if (girdi[ilk] != ' ') break;
     }
 
-    for (son = len; son > 0; son--) {
+    for (son = boyut - 1; son > 0; son--) {
         if (girdi[son] != ' ') break;
     }
 
-    size_t sonBoyut = (size_t) (son - ilk);
-    char *gecici = malloc(sizeof(char) * len);
+    size_t sonBoyut = (size_t) (son - ilk + 1);
+    char *gecici = malloc(sizeof(char) * boyut);
 
     for (int i = 0; i < sonBoyut; i++) {
         gecici[i] = girdi[ilk + i];
     }
 
     memcpy(girdi, gecici, sonBoyut);
+    girdi[sonBoyut] = '\0';
 
     free(gecici);
     return sonBoyut;
@@ -124,11 +125,12 @@ int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
         memcpy(bolumler[bolumSayisi], onceki, cizgi - onceki);
         onceki = cizgi + 1;
     }
+    bolumSayisi++;
 
-    if (bolumSayisi < 1)
+    if (bolumSayisi < 2)
         strcpy(bolumler[0], girdi);
     else
-        strcpy(bolumler[bolumSayisi], onceki);
+        strcpy(bolumler[bolumSayisi - 1], onceki);
 
     for (int i = 0; i < bolumSayisi; ++i) {
         gereksiz_bosluklari_temizle(bolumler[i]);
@@ -165,4 +167,40 @@ int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
         free(bolumler[bolumSayisi]);
 
     return r;
+}
+
+void hata_mesaji_yazdir(int hata_kodu) {
+    const char *komut_hata = "komutunu hatali kullandiniz. Kullanimi:\n\n";
+
+    switch (hata_kodu) {
+        case 0: /* Hata yok */
+        case ISLEM_CIKIS: /* Hata yok */
+            break;
+        case ISLEM_HATALI_GIRDI:
+            fprintf(stderr, "Hatali bir giris yaptiniz.");
+            break;
+        case ISLEM_HATALI_ANAHTAR:
+            fprintf(stderr, "Girilen anahtar degeri gecersiz.");
+            break;
+        case ISLEM_HATALI_EKLE_KOMUTU:
+            fprintf(stderr, "add %sadd|anahtar|ad|malzeme|renk", komut_hata);
+            break;
+        case ISLEM_HATALI_PRO_KOMUTU:
+            fprintf(stderr, "pro %spro < dosya_adi", komut_hata);
+            break;
+        case ISLEM_HATALI_SEARCH_KOMUTU:
+            fprintf(stderr, "search %ssearch|anahtar", komut_hata);
+            break;
+        case ISLEM_HATALI_WRITE_KOMUTU:
+            fprintf(stderr, "write %swrite|dosya_adi", komut_hata);
+            break;
+        case ISLEM_HATALI_PRINT_KOMUTU:
+            fprintf(stderr, "print %sprint", komut_hata);
+            break;
+        case ISLEM_HATALI_QUIT_KOMUTU:
+            fprintf(stderr, "quit %squit", komut_hata);
+            break;
+        default:
+            break;
+    }
 }

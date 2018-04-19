@@ -21,4 +21,6 @@
 
 extern int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit);
 
+extern void hata_mesaji_yazdir(int hata_kodu);
+
 #endif //ISLEM_H
