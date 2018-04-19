@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <mem.h>
-#include <islem.h>
+#include <giris.h>
 
 int main() {
     char tampon[256];
@@ -30,7 +30,7 @@ int main() {
             hata_mesaji_yazdir(r);
             printf("\n");
         }
-    } while (r != ISLEM_CIKIS);
+    } while (r != GIRIS_SONLANDIR);
 
     kayit_yoket(kayit);
 

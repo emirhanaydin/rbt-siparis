@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "islem.h"
+#include "giris.h"
 
 int sayi_mi(const char *girdi) {
     int i;
@@ -60,21 +60,21 @@ int gereksiz_bosluklari_temizle(char *girdi) {
 }
 
 int
-kayit_ekle_islemi(const char *anahtar, const char *ad, const char *malzeme, const char *renk, Kayit kayit) {
+giris_siparis_ekle(const char *anahtar, const char *ad, const char *malzeme, const char *renk, Kayit kayit) {
     if (!sayi_mi(anahtar))
-        return ISLEM_HATALI_ANAHTAR;
+        return GIRIS_HATALI_ANAHTAR;
 
     kayit_siparis_ekle(kayit, anahtar, ad, malzeme, renk);
 
     return 0;
 }
 
-int kayit_ekle_dosyadan_islemi(const char *girdi, Kayit kayit) {
+int giris_siparis_ekle_dosyadan(const char *girdi, Kayit kayit) {
     char *bosluksuz = strdup(girdi);
 
     if (bosluklari_sil(bosluksuz) < 5 || bosluksuz[3] != '<') {
         free(bosluksuz);
-        return ISLEM_HATALI_PRO_KOMUTU;
+        return GIRIS_HATALI_PRO_KOMUTU;
     }
 
     kayit_ekle_dosyadan(kayit, &bosluksuz[4]);
@@ -83,22 +83,22 @@ int kayit_ekle_dosyadan_islemi(const char *girdi, Kayit kayit) {
     return 0;
 }
 
-int kayit_ara_islemi(const char *anahtar, Kayit kayit) {
+int giris_siparis_ara(const char *anahtar, Kayit kayit) {
     if (!sayi_mi(anahtar))
-        return ISLEM_HATALI_ANAHTAR;
+        return GIRIS_HATALI_ANAHTAR;
 
     kayit_siparis_ara(kayit, strtol(anahtar, NULL, 10));
 
     return 0;
 }
 
-int kayitlari_yazdir_dosyaya_islemi(const char *dosyaAdi, Kayit kayit) {
+int giris_siparisleri_yazdir_dosyadan(const char *dosyaAdi, Kayit kayit) {
     kayitlari_yazdir_dosyaya(kayit, dosyaAdi);
 
     return 0;
 }
 
-int kayitlari_yazdir_islemi(Kayit kayit) {
+int giris_siparisleri_yazdir(Kayit kayit) {
     kayitlari_yazdir(kayit);
 
     return 0;
@@ -108,7 +108,7 @@ int girdiyi_cozumle(const char *girdi, Kayit kayit) {
     char *cizgi, *onceki = (char *) girdi;
     char *bolumler[5];
 
-    for (int i = 0; i < 5; i++) bolumler[i] = malloc(sizeof(char) * ISLEM_BOLUM_TAMPON_BOYUTU);
+    for (int i = 0; i < 5; i++) bolumler[i] = malloc(sizeof(char) * GIRIS_BOLUM_TAMPON_BOYUTU);
 
     int bolumSayisi;
     for (bolumSayisi = 0; bolumSayisi < 5; bolumSayisi++) {
@@ -132,31 +132,31 @@ int girdiyi_cozumle(const char *girdi, Kayit kayit) {
         gereksiz_bosluklari_temizle(bolumler[i]);
     }
 
-    int r = ISLEM_HATALI_GIRDI;
+    int r = GIRIS_HATALI_GIRDI;
     if (strcmp(bolumler[0], "add") == 0) {
-        if (bolumSayisi != 5) return ISLEM_HATALI_EKLE_KOMUTU;
+        if (bolumSayisi != 5) return GIRIS_HATALI_EKLE_KOMUTU;
 
-        r = kayit_ekle_islemi(bolumler[1], bolumler[2], bolumler[3], bolumler[4], kayit);
+        r = giris_siparis_ekle(bolumler[1], bolumler[2], bolumler[3], bolumler[4], kayit);
     } else if (memcmp(bolumler[0], "pro", 3) == 0) {
-        if (bolumSayisi != 1) return ISLEM_HATALI_PRO_KOMUTU;
+        if (bolumSayisi != 1) return GIRIS_HATALI_PRO_KOMUTU;
 
-        r = kayit_ekle_dosyadan_islemi(bolumler[0], kayit) != 0;
+        r = giris_siparis_ekle_dosyadan(bolumler[0], kayit) != 0;
     } else if (strcmp(bolumler[0], "search") == 0) {
-        if (bolumSayisi != 2) return ISLEM_HATALI_SEARCH_KOMUTU;
+        if (bolumSayisi != 2) return GIRIS_HATALI_SEARCH_KOMUTU;
 
-        r = kayit_ara_islemi(bolumler[1], kayit);
+        r = giris_siparis_ara(bolumler[1], kayit);
     } else if (strcmp(bolumler[0], "write") == 0) {
-        if (bolumSayisi != 2) return ISLEM_HATALI_WRITE_KOMUTU;
+        if (bolumSayisi != 2) return GIRIS_HATALI_WRITE_KOMUTU;
 
-        r = kayitlari_yazdir_dosyaya_islemi(bolumler[1], kayit);
+        r = giris_siparisleri_yazdir_dosyadan(bolumler[1], kayit);
     } else if (strcmp(bolumler[0], "print") == 0) {
-        if (bolumSayisi != 1) return ISLEM_HATALI_PRINT_KOMUTU;
+        if (bolumSayisi != 1) return GIRIS_HATALI_PRINT_KOMUTU;
 
-        r = kayitlari_yazdir_islemi(kayit);
+        r = giris_siparisleri_yazdir(kayit);
     } else if (strcmp(bolumler[0], "quit") == 0) {
-        if (bolumSayisi != 1) return ISLEM_HATALI_QUIT_KOMUTU;
+        if (bolumSayisi != 1) return GIRIS_HATALI_QUIT_KOMUTU;
 
-        r = ISLEM_CIKIS;
+        r = GIRIS_SONLANDIR;
     }
 
     for (bolumSayisi = 0; bolumSayisi < 5; bolumSayisi++)
@@ -170,30 +170,30 @@ void hata_mesaji_yazdir(int hata_kodu) {
 
     switch (hata_kodu) {
         case 0: /* Hata yok */
-        case ISLEM_CIKIS: /* Hata yok */
+        case GIRIS_SONLANDIR: /* Hata yok */
             break;
-        case ISLEM_HATALI_GIRDI:
+        case GIRIS_HATALI_GIRDI:
             fprintf(stderr, "Hatali bir giris yaptiniz.");
             break;
-        case ISLEM_HATALI_ANAHTAR:
+        case GIRIS_HATALI_ANAHTAR:
             fprintf(stderr, "Girilen anahtar degeri gecersiz.");
             break;
-        case ISLEM_HATALI_EKLE_KOMUTU:
+        case GIRIS_HATALI_EKLE_KOMUTU:
             fprintf(stderr, "add %sadd|anahtar|ad|malzeme|renk", komut_hata);
             break;
-        case ISLEM_HATALI_PRO_KOMUTU:
+        case GIRIS_HATALI_PRO_KOMUTU:
             fprintf(stderr, "pro %spro < dosya_adi", komut_hata);
             break;
-        case ISLEM_HATALI_SEARCH_KOMUTU:
+        case GIRIS_HATALI_SEARCH_KOMUTU:
             fprintf(stderr, "search %ssearch|anahtar", komut_hata);
             break;
-        case ISLEM_HATALI_WRITE_KOMUTU:
+        case GIRIS_HATALI_WRITE_KOMUTU:
             fprintf(stderr, "write %swrite|dosya_adi", komut_hata);
             break;
-        case ISLEM_HATALI_PRINT_KOMUTU:
+        case GIRIS_HATALI_PRINT_KOMUTU:
             fprintf(stderr, "print %sprint", komut_hata);
             break;
-        case ISLEM_HATALI_QUIT_KOMUTU:
+        case GIRIS_HATALI_QUIT_KOMUTU:
             fprintf(stderr, "quit %squit", komut_hata);
             break;
         default:
