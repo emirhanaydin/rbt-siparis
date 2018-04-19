@@ -59,12 +59,9 @@ int gereksiz_bosluklari_temizle(char *girdi) {
     return sonBoyut;
 }
 
-int
-giris_siparis_ekle(const char *anahtar, const char *ad, const char *malzeme, const char *renk, Kayit kayit) {
+int giris_siparis_ekle_kontrol(const char *anahtar) {
     if (!sayi_mi(anahtar))
         return GIRIS_HATALI_ANAHTAR;
-
-    kayit_siparis_ekle(kayit, anahtar, ad, malzeme, renk);
 
     return 0;
 }
@@ -83,11 +80,9 @@ int giris_siparis_ekle_dosyadan(const char *girdi, Kayit kayit) {
     return 0;
 }
 
-int giris_siparis_ara(const char *anahtar, Kayit kayit) {
+int giris_siparis_ara_kontrol(const char *anahtar) {
     if (!sayi_mi(anahtar))
         return GIRIS_HATALI_ANAHTAR;
-
-    kayit_siparis_ara(kayit, strtol(anahtar, NULL, 10));
 
     return 0;
 }
@@ -104,63 +99,56 @@ int giris_siparisleri_yazdir(Kayit kayit) {
     return 0;
 }
 
-int girdiyi_cozumle(const char *girdi, Kayit kayit) {
+int girdiyi_cozumle(const char *girdi, Kayit kayit, char **bolumler, int *bolumSayisi, enum Islem *secilenIslem) {
     char *cizgi, *onceki = (char *) girdi;
-    char *bolumler[5];
 
-    for (int i = 0; i < 5; i++) bolumler[i] = malloc(sizeof(char) * GIRIS_BOLUM_TAMPON_BOYUTU);
-
-    int bolumSayisi;
-    for (bolumSayisi = 0; bolumSayisi < 5; bolumSayisi++) {
+    for (*bolumSayisi = 0; *bolumSayisi < 5; (*bolumSayisi)++) {
         cizgi = strchr(onceki, '|');
 
         if (cizgi == '\0') break;
 
         size_t boyut = cizgi - onceki;
-        memcpy(bolumler[bolumSayisi], onceki, boyut);
-        bolumler[bolumSayisi][boyut] = '\0';
+        memcpy(bolumler[*bolumSayisi], onceki, boyut);
+        bolumler[*bolumSayisi][boyut] = '\0';
         onceki = cizgi + 1;
     }
-    bolumSayisi++;
+    (*bolumSayisi)++;
 
-    if (bolumSayisi < 2)
+    if (*bolumSayisi < 2)
         strcpy(bolumler[0], girdi);
     else
-        strcpy(bolumler[bolumSayisi - 1], onceki);
+        strcpy(bolumler[*bolumSayisi - 1], onceki);
 
-    for (int i = 0; i < bolumSayisi; ++i) {
+    for (int i = 0; i < *bolumSayisi; ++i) {
         gereksiz_bosluklari_temizle(bolumler[i]);
     }
 
     int r = GIRIS_HATALI_GIRDI;
     if (strcmp(bolumler[0], "add") == 0) {
-        if (bolumSayisi != 5) return GIRIS_HATALI_EKLE_KOMUTU;
+        if (*bolumSayisi != 5) return GIRIS_HATALI_EKLE_KOMUTU;
 
-        r = giris_siparis_ekle(bolumler[1], bolumler[2], bolumler[3], bolumler[4], kayit);
+        r = giris_siparis_ekle_kontrol(bolumler[1]);
     } else if (memcmp(bolumler[0], "pro", 3) == 0) {
-        if (bolumSayisi != 1) return GIRIS_HATALI_PRO_KOMUTU;
+        if (*bolumSayisi != 1) return GIRIS_HATALI_PRO_KOMUTU;
 
         r = giris_siparis_ekle_dosyadan(bolumler[0], kayit) != 0;
     } else if (strcmp(bolumler[0], "search") == 0) {
-        if (bolumSayisi != 2) return GIRIS_HATALI_SEARCH_KOMUTU;
+        if (*bolumSayisi != 2) return GIRIS_HATALI_SEARCH_KOMUTU;
 
-        r = giris_siparis_ara(bolumler[1], kayit);
+        r = giris_siparis_ara_kontrol(bolumler[1]);
     } else if (strcmp(bolumler[0], "write") == 0) {
-        if (bolumSayisi != 2) return GIRIS_HATALI_WRITE_KOMUTU;
+        if (*bolumSayisi != 2) return GIRIS_HATALI_WRITE_KOMUTU;
 
         r = giris_siparisleri_yazdir_dosyadan(bolumler[1], kayit);
     } else if (strcmp(bolumler[0], "print") == 0) {
-        if (bolumSayisi != 1) return GIRIS_HATALI_PRINT_KOMUTU;
+        if (*bolumSayisi != 1) return GIRIS_HATALI_PRINT_KOMUTU;
 
         r = giris_siparisleri_yazdir(kayit);
     } else if (strcmp(bolumler[0], "quit") == 0) {
-        if (bolumSayisi != 1) return GIRIS_HATALI_QUIT_KOMUTU;
+        if (*bolumSayisi != 1) return GIRIS_HATALI_QUIT_KOMUTU;
 
         r = GIRIS_SONLANDIR;
     }
-
-    for (bolumSayisi = 0; bolumSayisi < 5; bolumSayisi++)
-        free(bolumler[bolumSayisi]);
 
     return r;
 }

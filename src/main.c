@@ -1,10 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <mem.h>
 #include <giris.h>
+#include <mem.h>
+
+#define TAMPON_BOYUTU 256
+
+char **bolum_dizisi_olustur();
 
 int main() {
-    char tampon[256];
+    char tampon[TAMPON_BOYUTU];
     Kayit kayit = kayit_olustur();
     int r;
 
@@ -25,14 +29,46 @@ int main() {
         /* Sondaki satır sonu karakteri silinir. */
         if (tampon[len - 1] == '\n') tampon[len - 1] = '\0';
 
-        r = girdiyi_cozumle(tampon, kayit);
+        char **bolumler = bolum_dizisi_olustur();
+        int bolumSayisi;
+        enum Islem islem;
+        r = girdiyi_cozumle(tampon, kayit, bolumler, &bolumSayisi, &islem);
         if (r != 0) {
             hata_mesaji_yazdir(r);
             printf("\n");
+            continue;
+        }
+
+        switch (islem) {
+            case SIPARIS_EKLE:
+                kayit_siparis_ekle(kayit, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
+                break;
+            case SIPARIS_EKLE_DOSYADAN:
+                break;
+            case SIPARIS_ARA:
+                kayit_siparis_ara(kayit, strtol(bolumler[1], NULL, 10));
+                break;
+            case SIPARIS_YAZDIR:
+                break;
+            case SIPARIS_YAZDIR_DOSYAYA:
+                break;
+            case CIKIS:
+                break;
         }
     } while (r != GIRIS_SONLANDIR);
 
     kayit_yoket(kayit);
 
     exit(0);
+}
+
+char **bolum_dizisi_olustur() {
+    char **bolumler;
+
+    bolumler = malloc(sizeof(char *) * 5);
+    for (int i = 0; i < 5; ++i) {
+        bolumler[i] = malloc(sizeof(char) * TAMPON_BOYUTU);
+    }
+
+    return bolumler;
 }

@@ -1,11 +1,8 @@
 #ifndef GIRIS_H
 #define GIRIS_H
 
-#include <mem.h>
 #include "kayit.h"
 #include "siparis.h"
-
-#define GIRIS_BOLUM_TAMPON_BOYUTU 256
 
 #define GIRIS_SONLANDIR (-100)
 
@@ -18,7 +15,16 @@
 #define GIRIS_HATALI_PRINT_KOMUTU (-107)
 #define GIRIS_HATALI_QUIT_KOMUTU (-108)
 
-extern int girdiyi_cozumle(const char *girdi, Kayit kayit);
+enum Islem {
+    SIPARIS_EKLE,
+    SIPARIS_EKLE_DOSYADAN,
+    SIPARIS_ARA,
+    SIPARIS_YAZDIR,
+    SIPARIS_YAZDIR_DOSYAYA,
+    CIKIS
+};
+
+extern int girdiyi_cozumle(const char *girdi, Kayit kayit, char **bolumler, int *bolumSayisi, enum Islem *secilenIslem);
 
 extern void hata_mesaji_yazdir(int hata_kodu);
 

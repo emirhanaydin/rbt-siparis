@@ -1,6 +1,5 @@
 #include <kayit.h>
 #include <malloc.h>
-#include <mem.h>
 
 Kayit kayit_olustur() {
     Kayit kayit = malloc(sizeof(struct kayitstruct));
