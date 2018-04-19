@@ -1,5 +1,6 @@
 #include <kayit.h>
 #include <malloc.h>
+#include <mem.h>
 
 Kayit kayit_olustur() {
     Kayit kayit = malloc(sizeof(struct kayitstruct));
@@ -11,6 +12,14 @@ Kayit kayit_olustur() {
 
 void kayit_yoket(Kayit kayit) {
     jrb_free_tree(kayit->jrb);
+
+    Siparis *siparisler = kayit->siparisler;
+    for (int i = 0; i < kayit->adet; ++i) {
+        free(siparisler[i].ad);
+        free(siparisler[i].malzeme);
+        free(siparisler[i].renk);
+    }
+
     free(kayit->siparisler);
     free(kayit);
 }
@@ -31,10 +40,18 @@ static void siparis_boyut_kontrolu(Kayit kayit) {
     kayit->kapasite = yeniKapasite;
 }
 
-static void siparis_ekle(Kayit kayit, Siparis siparis) {
+static Siparis yeni_siparis_olustur(Kayit kayit) {
+    Siparis siparis;
+    siparis.anahtar = -1;
+    siparis.ad = malloc(sizeof(char) * KAYIT_TAMPON_BOYUTU);
+    siparis.malzeme = malloc(sizeof(char) * KAYIT_TAMPON_BOYUTU);
+    siparis.renk = malloc(sizeof(char) * KAYIT_TAMPON_BOYUTU);
+
     kayit->adet++;
     siparis_boyut_kontrolu(kayit);
     kayit->siparisler[kayit->adet - 1] = siparis;
+
+    return siparis;
 }
 
 static int siparis_ara(Kayit kayit, int anahtar) {
@@ -57,16 +74,20 @@ static int siparis_karsilastir(Jval j1, Jval j2) {
     if (s1->anahtar == s2->anahtar) return 0;
 }
 
-int kayit_ekle(Kayit kayit, Siparis siparis) {
-    siparis_ekle(kayit, siparis);
-    jrb_insert_gen(kayit->jrb, new_jval_v(siparis), new_jval_v(NULL), &siparis_karsilastir);
+int kayit_siparis_ekle(Kayit kayit, const char *anahtar, const char *ad, const char *malzeme, const char *renk) {
+    Siparis siparis = yeni_siparis_olustur(kayit);
 
-    return 0;
+    siparis.anahtar = strtol(anahtar, NULL, 10);
+    strcpy(siparis.ad, ad);
+    strcpy(siparis.malzeme, malzeme);
+    strcpy(siparis.renk, renk);
+
+    jrb_insert_gen(kayit->jrb, new_jval_v(yeni_siparis_olustur(kayit)), new_jval_v(NULL), &siparis_karsilastir);
 }
 
 int kayit_ekle_dosyadan(Kayit kayit, const char *dosyaAdi) { return 0; }
 
-int kayit_ara(Kayit kayit, int anahtar) {
+int kayit_siparis_ara(Kayit kayit, int anahtar) {
     int indeks = siparis_ara(kayit, anahtar);
     if (indeks < 0) return indeks;
 

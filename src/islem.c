@@ -1,19 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 #include "islem.h"
 
 int sayi_mi(const char *girdi) {
     int i;
 
-    for (i = 0; i < 11; i++) {
-        if (girdi[i] < '0' || girdi[i] > '9')
-            return 1;
+    for (i = 0; i < 12 && girdi[i] != '\0'; i++) {
+        if (!isdigit(girdi[i]))
+            return 0;
     }
+    if (i > 11) return 0;
+    long sayi = strtol(girdi, NULL, 10);
 
-    if (girdi[12] != '\0')
-        return 1;
-
-    return 0;
+    return sayi <= INT32_MAX;
 }
 
 int bosluklari_sil(char *girdi) {
@@ -60,17 +60,11 @@ int gereksiz_bosluklari_temizle(char *girdi) {
 }
 
 int
-kayit_ekle_islemi(const char *anahtar, const char *ad, const char *malzeme, const char *renk, Siparis *siparis,
-                  Kayit kayit) {
-    if (sayi_mi(anahtar) != 0)
+kayit_ekle_islemi(const char *anahtar, const char *ad, const char *malzeme, const char *renk, Kayit kayit) {
+    if (!sayi_mi(anahtar))
         return ISLEM_HATALI_ANAHTAR;
 
-    siparis->anahtar = strtol(anahtar, NULL, 10);
-    strcpy(siparis->ad, ad);
-    strcpy(siparis->malzeme, malzeme);
-    strcpy(siparis->renk, renk);
-
-    kayit_ekle(kayit, *siparis);
+    kayit_siparis_ekle(kayit, anahtar, ad, malzeme, renk);
 
     return 0;
 }
@@ -90,10 +84,10 @@ int kayit_ekle_dosyadan_islemi(const char *girdi, Kayit kayit) {
 }
 
 int kayit_ara_islemi(const char *anahtar, Kayit kayit) {
-    if (sayi_mi(anahtar) != 0)
+    if (!sayi_mi(anahtar))
         return ISLEM_HATALI_ANAHTAR;
 
-    kayit_ara(kayit, strtol(anahtar, NULL, 10));
+    kayit_siparis_ara(kayit, strtol(anahtar, NULL, 10));
 
     return 0;
 }
@@ -110,7 +104,7 @@ int kayitlari_yazdir_islemi(Kayit kayit) {
     return 0;
 }
 
-int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
+int girdiyi_cozumle(const char *girdi, Kayit kayit) {
     char *cizgi, *onceki = (char *) girdi;
     char *bolumler[5];
 
@@ -122,7 +116,9 @@ int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
 
         if (cizgi == '\0') break;
 
-        memcpy(bolumler[bolumSayisi], onceki, cizgi - onceki);
+        size_t boyut = cizgi - onceki;
+        memcpy(bolumler[bolumSayisi], onceki, boyut);
+        bolumler[bolumSayisi][boyut] = '\0';
         onceki = cizgi + 1;
     }
     bolumSayisi++;
@@ -140,7 +136,7 @@ int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
     if (strcmp(bolumler[0], "add") == 0) {
         if (bolumSayisi != 5) return ISLEM_HATALI_EKLE_KOMUTU;
 
-        r = kayit_ekle_islemi(bolumler[1], bolumler[2], bolumler[3], bolumler[4], siparis, kayit);
+        r = kayit_ekle_islemi(bolumler[1], bolumler[2], bolumler[3], bolumler[4], kayit);
     } else if (memcmp(bolumler[0], "pro", 3) == 0) {
         if (bolumSayisi != 1) return ISLEM_HATALI_PRO_KOMUTU;
 
@@ -170,7 +166,7 @@ int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit) {
 }
 
 void hata_mesaji_yazdir(int hata_kodu) {
-    const char *komut_hata = "komutunu hatali kullandiniz. Kullanimi:\n\n";
+    const char *komut_hata = "komutunu hatali kullandiniz. Kullanimi: ";
 
     switch (hata_kodu) {
         case 0: /* Hata yok */

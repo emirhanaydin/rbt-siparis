@@ -18,7 +18,7 @@
 #define ISLEM_HATALI_PRINT_KOMUTU (-107)
 #define ISLEM_HATALI_QUIT_KOMUTU (-108)
 
-extern int girdiyi_cozumle(const char *girdi, Siparis *siparis, Kayit kayit);
+extern int girdiyi_cozumle(const char *girdi, Kayit kayit);
 
 extern void hata_mesaji_yazdir(int hata_kodu);
 
