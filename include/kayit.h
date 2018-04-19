@@ -4,13 +4,15 @@
 #include "jrb.h"
 #include "siparis.h"
 
-typedef struct {
-    JRB rbt;
+typedef struct kayitstruct {
+    JRB jrb;
 } *Kayit;
 
-/* Aşağıda bildirilen fonksiyonlar; işlem hatasız tamamlanırsa 1, aksi takdirde 0 döndürürler. */
+/* Aşağıda bildirilen fonksiyonlar; işlem hatasız tamamlanırsa 0, aksi takdirde hata değeri döndürürler. */
 
 extern Kayit kayit_olustur();
+
+extern void kayit_yoket(Kayit kayit);
 
 extern int kayit_ekle(Kayit kayit, Siparis siparis);
 
