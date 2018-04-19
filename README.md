@@ -14,14 +14,14 @@ Komutlar:
 #### a) Şipariş ekleme: add
 
 
-> add|-sipKey-|-sipAd-|-sipMalezeme-|-sipRenk-
+>&gt; add|-sipKey-|-sipAd-|-sipMalezeme-|-sipRenk-
 
 
 Şeklinde giriş yapıldığında, ilgili kaydın tüm alanları ağaç yapısına doldurulacaktır. Aynı veriler yönlendirme ile de
 okutulabilecektir. Örneğin, test için verilen ir dosya aşağıdaki gibi okutulabilecektir:
 
 
-> pro < input.txt
+>&gt; pro < input.txt
 
 
 Biçim açısından uygun olmayan kayıtlara rastlanırsa ekrana “Biçim uygun değil.” mesajı yazmalı ve tekrar komut
@@ -31,13 +31,13 @@ beklemelidir. Bozuk biçimli kayıtları içeri (veri yapısına) almamalıdır.
 #### b) Sipariş arama (anahtara göre arama): search
 
 
-> search|-sipKey-
+>&gt; search|-sipKey-
 
 
 Arama sonrasında bulunan kayıt ekrana aşağıdaki gibi yazdırılacaktır.
 
 
-> search|
+>&gt; search|  
 13, MacBook, Metal, White
 
 
@@ -47,21 +47,21 @@ Kayıt bulunamaz ise ekrana “Aranan kayıt bulunamadı.” yazmalıdır.
 #### c) Siparişleri dosyaya yazdırma: write
 
 
-> write|fileName
+>&gt; write|fileName
 
 
 Ağaç yapısına doldurulan veriler, fileName ile verilen dosyaya sıralı biçimde aşağıdaki biçimde kaydedilmelidir.
 
 
-0, iPhone, Silicon, Rose Gold
-1, Car, Metal, Tornado Red
+0, iPhone, Silicon, Rose Gold  
+1, Car, Metal, Tornado Red  
 ...
 
 
 #### d) Siparişleri ekrana yazdırma: print
 
 
-> print
+>&gt; print
 
 
 Dosyaya yazdırılan biçimde ağaç içindeki tüm kayıtlar ekrana yazdırılmalıdır.
@@ -70,7 +70,7 @@ Dosyaya yazdırılan biçimde ağaç içindeki tüm kayıtlar ekrana yazdırılm
 #### e) Çıkış: quit
 
 
-> quit
+>&gt; quit
 
 
 Programdan temiz (kullanılan bellek iade edilmiş, dosyalar kapatılmış vb.) bir şekilde çıkılmalıdır.
