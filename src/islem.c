@@ -1,5 +1,5 @@
-#include <siparis.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "islem.h"
 
 int sayi_mi(const char *girdi) {

@@ -1,11 +1,17 @@
 #ifndef KAYIT_H
 #define KAYIT_H
 
+#include <stdint.h>
 #include "jrb.h"
 #include "siparis.h"
 
+#define KAYIT_SIPARIS_BULUNAMADI (-200)
+
 typedef struct kayitstruct {
     JRB jrb;
+    Siparis *siparisler;
+    int adet;
+    int kapasite;
 } *Kayit;
 
 /* Aşağıda bildirilen fonksiyonlar; işlem hatasız tamamlanırsa 0, aksi takdirde hata değeri döndürürler. */
