@@ -8,4 +8,6 @@ typedef struct {
     char *renk;
 } Siparis;
 
+extern void siparis_yazdir(Siparis siparis);
+
 #endif //SIPARIS_H

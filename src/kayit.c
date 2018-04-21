@@ -1,6 +1,7 @@
 #include <kayit.h>
 #include <malloc.h>
 #include <mem.h>
+#include <stdio.h>
 
 Kayit kayit_olustur() {
     Kayit kayit = malloc(sizeof(struct kayitstruct));
@@ -84,11 +85,20 @@ int kayit_siparis_ara(Kayit kayit, int anahtar, Siparis **siparis) {
     if (indeks < 0) return indeks;
 
     JRB dugum = jrb_find_int(kayit->jrb, anahtar);
-    *siparis = ((Siparis *) dugum->val.v);
+    *siparis = dugum->val.v;
 
     return 0;
 }
 
-int kayitlari_yazdir(Kayit kayit) { return 0; }
+int kayitlari_yazdir(Kayit kayit) {
+    JRB gecici;
+
+    jrb_traverse(gecici, kayit->jrb) {
+        Siparis *siparis = gecici->val.v;
+        siparis_yazdir(*siparis);
+    }
+
+    return 0;
+}
 
 int kayitlari_yazdir_dosyaya(Kayit kayit, const char *dosyaAdi) { return 0; }

@@ -47,7 +47,7 @@ int main() {
                 break;
             case SIPARIS_ARA:
                 kayit_siparis_ara(kayit, strtol(bolumler[1], NULL, 10), &siparis);
-                printf("%d, %s, %s, %s\n", siparis->anahtar, siparis->ad, siparis->malzeme, siparis->renk);
+                siparis_yazdir(*siparis);
                 break;
             case SIPARIS_YAZDIR:
                 break;
