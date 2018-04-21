@@ -30,7 +30,7 @@ int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tampon
 
     while (get_line(is) >= 0) {
         enum Komut komut;
-        int hataKodu = girdiyi_cozumle(is->text1, islem, bolumler, &komut);
+        int hataKodu = girdiyi_cozumle(is->text1, bolumler, &komut);
         if (hataKodu != 0) {
             fprintf(stderr, "Hatali giris: %s", is->text1);
             continue;

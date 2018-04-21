@@ -29,7 +29,7 @@ int main() {
         if (tampon[len - 1] == '\n') tampon[len - 1] = '\0';
 
         char **bolumler = string_dizisi_olustur(5, TAMPON_BOYUTU);
-        int hataKodu = girdiyi_cozumle(tampon, islem, bolumler, &komut);
+        int hataKodu = girdiyi_cozumle(tampon, bolumler, &komut);
         if (hataKodu != 0) {
             hata_mesaji_yazdir(hataKodu);
             printf("\n");
@@ -47,9 +47,10 @@ int main() {
                     islem_siparis_ara(islem, strtol(bolumler[1], NULL, 10), &siparis);
                     siparis_yazdir(*siparis);
                     break;
-                case SIPARIS_YAZDIR:
+                case SIPARISLERI_YAZDIR:
+                    islem_siparisleri_yazdir(islem);
                     break;
-                case SIPARIS_YAZDIR_DOSYAYA:
+                case SIPARISLERI_YAZDIR_DOSYAYA:
                     break;
                 case CIKIS:
                     break;

@@ -26,12 +26,12 @@ enum Komut {
     SIPARIS_EKLE,
     SIPARIS_EKLE_DOSYADAN,
     SIPARIS_ARA,
-    SIPARIS_YAZDIR,
-    SIPARIS_YAZDIR_DOSYAYA,
+    SIPARISLERI_YAZDIR,
+    SIPARISLERI_YAZDIR_DOSYAYA,
     CIKIS
 };
 
-extern int girdiyi_cozumle(const char *girdi, Islem islem, char **bolumler, enum Komut *secilenKomut);
+extern int girdiyi_cozumle(const char *girdi, char **bolumler, enum Komut *secilenKomut);
 
 extern void hata_mesaji_yazdir(int hata_kodu);
 
