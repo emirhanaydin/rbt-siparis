@@ -7,12 +7,13 @@ LIB=lib
 SRC=src
 TARGET=main
 
-all: compile run
+all: mkbin compile run
 	
 compile: main.o komut.o islem.o siparis.o yardimci.o
 	$(CC) $(CFLAGS) $(LIB)/main.o $(LIB)/komut.o $(LIB)/islem.o $(LIB)/siparis.o $(LIB)/yardimci.o $(USERLIBS) -o $(BIN)/$(TARGET) 
 
-run:
+run: 
+	clear
 	./$(BIN)/$(TARGET)
 	
 main.o: src/main.c include/komut.h include/islem.h include/jrb.h include/jval.h include/siparis.h include/yardimci.h
@@ -25,6 +26,10 @@ siparis.o: src/siparis.c include/siparis.h
 	$(CC) -I $(INCL) -c $(SRC)/siparis.c -o $(LIB)/siparis.o
 yardimci.o: src/yardimci.c
 	$(CC) -I $(INCL) -c $(SRC)/yardimci.c -o $(LIB)/yardimci.o
+
+.PHONY: mkbin
+mkbin:
+	mkdir -p bin
 
 .PHONY: clean
 clean:
