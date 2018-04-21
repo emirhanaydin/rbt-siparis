@@ -30,8 +30,7 @@ int main() {
         if (tampon[len - 1] == '\n') tampon[len - 1] = '\0';
 
         char **bolumler = bolum_dizisi_olustur();
-        int bolumSayisi;
-        int hataKodu = girdiyi_cozumle(tampon, islem, bolumler, &bolumSayisi, &komut);
+        int hataKodu = girdiyi_cozumle(tampon, islem, bolumler, &komut);
         if (hataKodu != 0) {
             hata_mesaji_yazdir(hataKodu);
             printf("\n");

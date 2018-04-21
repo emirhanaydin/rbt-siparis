@@ -106,58 +106,59 @@ int komut_siparisleri_yazdir(Islem kayit) {
     return 0;
 }
 
-int girdiyi_cozumle(const char *girdi, Islem islem, char **bolumler, int *bolumSayisi, enum Komut *secilenKomut) {
+int girdiyi_cozumle(const char *girdi, Islem islem, char **bolumler, enum Komut *secilenKomut) {
     char *cizgi, *onceki = (char *) girdi;
+    int bolumSayisi = 0;
 
-    for (*bolumSayisi = 0; *bolumSayisi < 5; (*bolumSayisi)++) {
+    for (bolumSayisi = 0; bolumSayisi < 5; (bolumSayisi)++) {
         cizgi = strchr(onceki, '|');
 
         if (cizgi == '\0') break;
 
         size_t boyut = cizgi - onceki;
-        memcpy(bolumler[*bolumSayisi], onceki, boyut);
-        bolumler[*bolumSayisi][boyut] = '\0';
+        memcpy(bolumler[bolumSayisi], onceki, boyut);
+        bolumler[bolumSayisi][boyut] = '\0';
         onceki = cizgi + 1;
     }
-    (*bolumSayisi)++;
+    (bolumSayisi)++;
 
-    if (*bolumSayisi < 2)
+    if (bolumSayisi < 2)
         strcpy(bolumler[0], girdi);
     else
-        strcpy(bolumler[*bolumSayisi - 1], onceki);
+        strcpy(bolumler[bolumSayisi - 1], onceki);
 
-    for (int i = 0; i < *bolumSayisi; ++i) {
+    for (int i = 0; i < bolumSayisi; ++i) {
         gereksiz_bosluklari_temizle(bolumler[i]);
     }
 
     int r = KOMUT_HATALI_GIRDI;
     if (strcmp(bolumler[0], KOMUT_EKLE) == 0) {
-        if (*bolumSayisi != 5) return KOMUT_HATALI_EKLE;
+        if (bolumSayisi != 5) return KOMUT_HATALI_EKLE;
 
         r = komut_siparis_ekle_kontrol(bolumler[1]);
         *secilenKomut = SIPARIS_EKLE;
     } else if (memcmp(bolumler[0], KOMUT_PRO, 3) == 0) {
-        if (*bolumSayisi != 1) return KOMUT_HATALI_PRO;
+        if (bolumSayisi != 1) return KOMUT_HATALI_PRO;
 
         r = komut_siparis_ekle_dosyadan(bolumler[0], bolumler[1]);
         *secilenKomut = SIPARIS_EKLE_DOSYADAN;
     } else if (strcmp(bolumler[0], KOMUT_SEARCH) == 0) {
-        if (*bolumSayisi != 2) return KOMUT_HATALI_SEARCH;
+        if (bolumSayisi != 2) return KOMUT_HATALI_SEARCH;
 
         r = komut_siparis_ara_kontrol(bolumler[1]);
         *secilenKomut = SIPARIS_ARA;
     } else if (strcmp(bolumler[0], KOMUT_WRITE) == 0) {
-        if (*bolumSayisi != 2) return KOMUT_HATALI_WRITE;
+        if (bolumSayisi != 2) return KOMUT_HATALI_WRITE;
 
         r = komut_siparisleri_yazdir_dosyadan(bolumler[1], islem);
         *secilenKomut = SIPARIS_YAZDIR_DOSYAYA;
     } else if (strcmp(bolumler[0], KOMUT_PRINT) == 0) {
-        if (*bolumSayisi != 1) return KOMUT_HATALI_PRINT;
+        if (bolumSayisi != 1) return KOMUT_HATALI_PRINT;
 
         r = komut_siparisleri_yazdir(islem);
         *secilenKomut = SIPARIS_YAZDIR;
     } else if (strcmp(bolumler[0], KOMUT_QUIT) == 0) {
-        if (*bolumSayisi != 1) return KOMUT_HATALI_QUIT;
+        if (bolumSayisi != 1) return KOMUT_HATALI_QUIT;
 
         r = 0;
         *secilenKomut = CIKIS;
