@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <giris.h>
+#include <komut.h>
 #include <mem.h>
 
 #define TAMPON_BOYUTU 256
@@ -31,7 +31,7 @@ int main() {
 
         char **bolumler = bolum_dizisi_olustur();
         int bolumSayisi;
-        enum Islem islem;
+        enum Komut islem;
         r = girdiyi_cozumle(tampon, kayit, bolumler, &bolumSayisi, &islem);
         if (r != 0) {
             hata_mesaji_yazdir(r);
@@ -55,7 +55,7 @@ int main() {
             case CIKIS:
                 break;
         }
-    } while (r != GIRIS_SONLANDIR);
+    } while (r != KOMUT_SONLANDIR);
 
     kayit_yoket(kayit);
 
