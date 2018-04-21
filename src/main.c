@@ -10,7 +10,7 @@ char **bolum_dizisi_olustur();
 int main() {
     char tampon[TAMPON_BOYUTU];
     Kayit kayit = kayit_olustur();
-    int r;
+    enum Komut islem;
 
     do {
         printf("> ");
@@ -31,14 +31,14 @@ int main() {
 
         char **bolumler = bolum_dizisi_olustur();
         int bolumSayisi;
-        enum Komut islem;
-        r = girdiyi_cozumle(tampon, kayit, bolumler, &bolumSayisi, &islem);
-        if (r != 0) {
-            hata_mesaji_yazdir(r);
+        int hataKodu = girdiyi_cozumle(tampon, kayit, bolumler, &bolumSayisi, &islem);
+        if (hataKodu != 0) {
+            hata_mesaji_yazdir(hataKodu);
             printf("\n");
             continue;
         }
 
+        Siparis *siparis;
         switch (islem) {
             case SIPARIS_EKLE:
                 kayit_siparis_ekle(kayit, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
@@ -46,7 +46,8 @@ int main() {
             case SIPARIS_EKLE_DOSYADAN:
                 break;
             case SIPARIS_ARA:
-                kayit_siparis_ara(kayit, strtol(bolumler[1], NULL, 10));
+                kayit_siparis_ara(kayit, strtol(bolumler[1], NULL, 10), &siparis);
+                printf("%d, %s, %s, %s\n", siparis->anahtar, siparis->ad, siparis->malzeme, siparis->renk);
                 break;
             case SIPARIS_YAZDIR:
                 break;
@@ -55,7 +56,7 @@ int main() {
             case CIKIS:
                 break;
         }
-    } while (r != KOMUT_SONLANDIR);
+    } while (islem != CIKIS);
 
     kayit_yoket(kayit);
 

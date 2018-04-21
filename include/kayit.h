@@ -11,7 +11,7 @@
 
 typedef struct kayitstruct {
     JRB jrb;
-    Siparis *siparisler;
+    Siparis **siparisler;
     int adet;
     int kapasite;
 } *Kayit;
@@ -26,7 +26,7 @@ extern int kayit_siparis_ekle(Kayit kayit, const char *anahtar, const char *ad, 
 
 extern int kayit_ekle_dosyadan(Kayit kayit, const char *dosyaAdi);
 
-extern int kayit_siparis_ara(Kayit kayit, int anahtar);
+extern int kayit_siparis_ara(Kayit kayit, int anahtar, Siparis **siparis);
 
 extern int kayitlari_yazdir(Kayit kayit);
 
