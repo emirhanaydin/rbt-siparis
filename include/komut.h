@@ -31,7 +31,7 @@ enum Komut {
     CIKIS
 };
 
-extern int girdiyi_cozumle(const char *girdi, Islem kayit, char **bolumler, int *bolumSayisi, enum Komut *secilenKomut);
+extern int girdiyi_cozumle(const char *girdi, Islem islem, char **bolumler, int *bolumSayisi, enum Komut *secilenKomut);
 
 extern void hata_mesaji_yazdir(int hata_kodu);
 

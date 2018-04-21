@@ -26,7 +26,7 @@ int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi) {
 
     while (get_line(is) >= 0) {
         for (int i = 0; i < is->NF; ++i) {
-            printf("%d: %s\n", is->line, is->fields[i]);
+            printf("%s", is->text1);
         }
     }
 
