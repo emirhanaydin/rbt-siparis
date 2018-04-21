@@ -30,7 +30,7 @@ int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tampon
     IS is = new_inputstruct(dosyaAdi);
 
     if (is == NULL)
-        return ISLEM_DOSYA_OKUNAMIYOR;
+        return ISLEM_DOSYA_ACILAMADI;
 
     char **bolumler = string_dizisi_olustur(5, tamponBoyutu);
 
@@ -79,4 +79,21 @@ int islem_siparisleri_yazdir(Islem islem) {
     return 0;
 }
 
-int islem_siparisleri_yazdir_dosyaya(Islem islem, const char *dosyaAdi) { return 0; }
+int islem_siparisleri_yazdir_dosyaya(Islem islem, const char *dosyaAdi) {
+    JRB gecici;
+    FILE *dosya = fopen(dosyaAdi, "w");
+
+    if (dosya == NULL) {
+        return ISLEM_DOSYA_ACILAMADI;
+    }
+
+    jrb_traverse(gecici, islem->jrb) {
+        Siparis *siparis = gecici->val.v;
+
+        fprintf(dosya, "%d, %s, %s, %s\n", siparis->anahtar, siparis->ad, siparis->malzeme, siparis->renk);
+    }
+
+    fclose(dosya);
+
+    return 0;
+}

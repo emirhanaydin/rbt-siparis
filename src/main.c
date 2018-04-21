@@ -51,6 +51,7 @@ int main() {
                     islem_siparisleri_yazdir(islem);
                     break;
                 case SIPARISLERI_YAZDIR_DOSYAYA:
+                    islem_siparisleri_yazdir_dosyaya(islem, bolumler[1]);
                     break;
                 case CIKIS:
                     break;

@@ -6,7 +6,7 @@
 #include "siparis.h"
 
 #define ISLEM_SIPARIS_BULUNAMADI (-200)
-#define ISLEM_DOSYA_OKUNAMIYOR (-201)
+#define ISLEM_DOSYA_ACILAMADI (-201)
 
 typedef struct islemstruct {
     JRB jrb;
