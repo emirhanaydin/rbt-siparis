@@ -94,7 +94,7 @@ int girdiyi_cozumle(const char *girdi, char **bolumler, enum Komut *secilenKomut
     char *cizgi, *onceki = (char *) girdi;
     int bolumSayisi = 0;
 
-    for (bolumSayisi = 0; bolumSayisi < 5; (bolumSayisi)++) {
+    for (bolumSayisi = 0; bolumSayisi < 5; bolumSayisi++) {
         cizgi = strchr(onceki, '|');
 
         if (cizgi == '\0') break;
@@ -104,6 +104,10 @@ int girdiyi_cozumle(const char *girdi, char **bolumler, enum Komut *secilenKomut
         bolumler[bolumSayisi][boyut] = '\0';
         onceki = cizgi + 1;
     }
+
+    if (bolumSayisi > 4)
+        return KOMUT_HATALI_GIRDI;
+
     bolumSayisi++;
 
     if (bolumSayisi < 2)

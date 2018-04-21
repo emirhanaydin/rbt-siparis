@@ -35,6 +35,8 @@ static int islem_siparis_sayisi_al(Islem islem) {
 
 int islem_siparis_ekle(Islem islem, Siparis *siparis) {
     jrb_insert_int(islem->jrb, siparis->anahtar, new_jval_v(siparis));
+
+    return 0;
 }
 
 int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tamponBoyutu) {
