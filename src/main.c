@@ -2,10 +2,9 @@
 #include <stdio.h>
 #include <komut.h>
 #include <mem.h>
+#include <yardimci.h>
 
 #define TAMPON_BOYUTU 256
-
-char **bolum_dizisi_olustur();
 
 int main() {
     char tampon[TAMPON_BOYUTU];
@@ -29,50 +28,37 @@ int main() {
         /* Sondaki satır sonu karakteri silinir. */
         if (tampon[len - 1] == '\n') tampon[len - 1] = '\0';
 
-        char **bolumler = bolum_dizisi_olustur();
+        char **bolumler = string_dizisi_olustur(5, TAMPON_BOYUTU);
         int hataKodu = girdiyi_cozumle(tampon, islem, bolumler, &komut);
         if (hataKodu != 0) {
             hata_mesaji_yazdir(hataKodu);
             printf("\n");
-            continue;
+        } else {
+            Siparis *siparis = siparis_doldur_yeni(TAMPON_BOYUTU, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
+
+            switch (komut) {
+                case SIPARIS_EKLE:
+                    islem_siparis_ekle(islem, siparis);
+                    break;
+                case SIPARIS_EKLE_DOSYADAN:
+                    islem_siparis_ekle_dosyadan(islem, bolumler[1], TAMPON_BOYUTU);
+                    break;
+                case SIPARIS_ARA:
+                    islem_siparis_ara(islem, strtol(bolumler[1], NULL, 10), &siparis);
+                    siparis_yazdir(*siparis);
+                    break;
+                case SIPARIS_YAZDIR:
+                    break;
+                case SIPARIS_YAZDIR_DOSYAYA:
+                    break;
+                case CIKIS:
+                    break;
+            }
         }
-
-        Siparis *siparis = siparis_doldur_yeni(TAMPON_BOYUTU, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
-
-        switch (komut) {
-            case SIPARIS_EKLE:
-                islem_siparis_ekle(islem, siparis);
-                break;
-            case SIPARIS_EKLE_DOSYADAN:
-                islem_siparis_ekle_dosyadan(islem, bolumler[1]);
-                break;
-            case SIPARIS_ARA:
-                islem_siparis_ara(islem, strtol(bolumler[1], NULL, 10), &siparis);
-                siparis_yazdir(*siparis);
-                break;
-            case SIPARIS_YAZDIR:
-                break;
-            case SIPARIS_YAZDIR_DOSYAYA:
-                break;
-            case CIKIS:
-                break;
-        }
-
-        siparis_yoket(siparis);
+        string_dizisi_yok_et(bolumler, 5);
     } while (komut != CIKIS);
 
     islem_yoket(islem);
 
     exit(0);
-}
-
-char **bolum_dizisi_olustur() {
-    char **bolumler;
-
-    bolumler = malloc(sizeof(char *) * 5);
-    for (int i = 0; i < 5; ++i) {
-        bolumler[i] = malloc(sizeof(char) * TAMPON_BOYUTU);
-    }
-
-    return bolumler;
 }

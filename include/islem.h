@@ -20,7 +20,7 @@ extern void islem_yoket(Islem islem);
 
 extern int islem_siparis_ekle(Islem islem, Siparis *siparis);
 
-extern int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi);
+extern int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tamponBoyutu);
 
 extern int islem_siparis_ara(Islem islem, int anahtar, Siparis **siparis);
 

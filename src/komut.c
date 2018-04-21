@@ -17,22 +17,18 @@ static int sayi_mi(const char *girdi) {
     return sayi <= INT32_MAX;
 }
 
-static int bosluklari_sil(char *girdi) {
-    size_t boyut = strlen(girdi);
-    char *gecici = malloc(sizeof(char) * boyut);
-    size_t sonBoyut = 0;
+size_t karakterleri_sil(char *girdi, char *karakterler) {
+    char *oku = girdi, *yaz = girdi;
+    size_t boyut = 0;
 
-    for (int i = 0; i < boyut; i++) {
-        if (girdi[i] == ' ') continue;
-
-        gecici[sonBoyut++] = girdi[i];
+    while (*oku) {
+        *yaz = *oku++;
+        if (strchr(karakterler, *yaz) == NULL) {
+            yaz++;
+            boyut++;
+        }
     }
-
-    memcpy(girdi, gecici, sonBoyut);
-    girdi[sonBoyut] = '\0';
-    free(gecici);
-
-    return sonBoyut;
+    *yaz = '\0';
 }
 
 static int gereksiz_bosluklari_temizle(char *girdi) {
@@ -72,7 +68,7 @@ int komut_siparis_ekle_dosyadan(const char *girdi, char *dosyaAdi) {
     char *bosluksuz = strdup(girdi);
     int r = 0;
 
-    if (bosluklari_sil(bosluksuz) < 5)
+    if (karakterleri_sil(bosluksuz, " ") < 5)
         r = KOMUT_HATALI_PRO;
 
     char *arguman = strchr(bosluksuz, '<');
@@ -120,7 +116,7 @@ int girdiyi_cozumle(const char *girdi, Islem islem, char **bolumler, enum Komut 
         bolumler[bolumSayisi][boyut] = '\0';
         onceki = cizgi + 1;
     }
-    (bolumSayisi)++;
+    bolumSayisi++;
 
     if (bolumSayisi < 2)
         strcpy(bolumler[0], girdi);
@@ -129,6 +125,7 @@ int girdiyi_cozumle(const char *girdi, Islem islem, char **bolumler, enum Komut 
 
     for (int i = 0; i < bolumSayisi; ++i) {
         gereksiz_bosluklari_temizle(bolumler[i]);
+        karakterleri_sil(bolumler[i], "\r\n");
     }
 
     int r = KOMUT_HATALI_GIRDI;
