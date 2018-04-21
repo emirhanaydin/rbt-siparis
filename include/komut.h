@@ -1,7 +1,7 @@
 #ifndef KOMUT_H
 #define KOMUT_H
 
-#include "kayit.h"
+#include "islem.h"
 #include "siparis.h"
 
 #define KOMUT_SONLANDIR (-100)
@@ -31,7 +31,7 @@ enum Komut {
     CIKIS
 };
 
-extern int girdiyi_cozumle(const char *girdi, Kayit kayit, char **bolumler, int *bolumSayisi, enum Komut *secilenKomut);
+extern int girdiyi_cozumle(const char *girdi, Islem kayit, char **bolumler, int *bolumSayisi, enum Komut *secilenKomut);
 
 extern void hata_mesaji_yazdir(int hata_kodu);
 

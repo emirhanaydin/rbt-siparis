@@ -9,7 +9,7 @@ char **bolum_dizisi_olustur();
 
 int main() {
     char tampon[TAMPON_BOYUTU];
-    Kayit kayit = kayit_olustur();
+    Islem kayit = islem_olustur();
     enum Komut islem;
 
     do {
@@ -41,12 +41,12 @@ int main() {
         Siparis *siparis;
         switch (islem) {
             case SIPARIS_EKLE:
-                kayit_siparis_ekle(kayit, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
+                islem_siparis_ekle(kayit, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
                 break;
             case SIPARIS_EKLE_DOSYADAN:
                 break;
             case SIPARIS_ARA:
-                kayit_siparis_ara(kayit, strtol(bolumler[1], NULL, 10), &siparis);
+                islem_siparis_ara(kayit, strtol(bolumler[1], NULL, 10), &siparis);
                 siparis_yazdir(*siparis);
                 break;
             case SIPARIS_YAZDIR:
@@ -58,7 +58,7 @@ int main() {
         }
     } while (islem != CIKIS);
 
-    kayit_yoket(kayit);
+    islem_yoket(kayit);
 
     exit(0);
 }

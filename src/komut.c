@@ -67,7 +67,7 @@ int komut_siparis_ekle_kontrol(const char *anahtar) {
     return 0;
 }
 
-int komut_siparis_ekle_dosyadan(const char *girdi, Kayit kayit) {
+int komut_siparis_ekle_dosyadan(const char *girdi, Islem kayit) {
     char *bosluksuz = strdup(girdi);
 
     if (bosluklari_sil(bosluksuz) < 5 || bosluksuz[3] != '<') {
@@ -75,7 +75,7 @@ int komut_siparis_ekle_dosyadan(const char *girdi, Kayit kayit) {
         return KOMUT_HATALI_PRO;
     }
 
-    kayit_ekle_dosyadan(kayit, &bosluksuz[4]);
+    islem_ekle_dosyadan(kayit, &bosluksuz[4]);
 
     free(bosluksuz);
     return 0;
@@ -88,19 +88,19 @@ int komut_siparis_ara_kontrol(const char *anahtar) {
     return 0;
 }
 
-int komut_siparisleri_yazdir_dosyadan(const char *dosyaAdi, Kayit kayit) {
-    kayitlari_yazdir_dosyaya(kayit, dosyaAdi);
+int komut_siparisleri_yazdir_dosyadan(const char *dosyaAdi, Islem kayit) {
+    islem_siparisleri_yazdir_dosyaya(kayit, dosyaAdi);
 
     return 0;
 }
 
-int komut_siparisleri_yazdir(Kayit kayit) {
-    kayitlari_yazdir(kayit);
+int komut_siparisleri_yazdir(Islem kayit) {
+    islem_siparisleri_yazdir(kayit);
 
     return 0;
 }
 
-int girdiyi_cozumle(const char *girdi, Kayit kayit, char **bolumler, int *bolumSayisi, enum Komut *secilenKomut) {
+int girdiyi_cozumle(const char *girdi, Islem kayit, char **bolumler, int *bolumSayisi, enum Komut *secilenKomut) {
     char *cizgi, *onceki = (char *) girdi;
 
     for (*bolumSayisi = 0; *bolumSayisi < 5; (*bolumSayisi)++) {
