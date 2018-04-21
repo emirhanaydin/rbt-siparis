@@ -38,23 +38,29 @@ int main() {
 
             switch (komut) {
                 case SIPARIS_EKLE:
-                    islem_siparis_ekle(islem, siparis);
+                    hataKodu = islem_siparis_ekle(islem, siparis);
                     break;
                 case SIPARIS_EKLE_DOSYADAN:
-                    islem_siparis_ekle_dosyadan(islem, bolumler[1], TAMPON_BOYUTU);
+                    hataKodu = islem_siparis_ekle_dosyadan(islem, bolumler[1], TAMPON_BOYUTU);
                     break;
                 case SIPARIS_ARA:
-                    islem_siparis_ara(islem, strtol(bolumler[1], NULL, 10), &siparis);
-                    siparis_yazdir(*siparis);
+                    hataKodu = islem_siparis_ara(islem, strtol(bolumler[1], NULL, 10), &siparis);
+                    if (hataKodu == 0)
+                        siparis_yazdir(*siparis);
                     break;
                 case SIPARISLERI_YAZDIR:
-                    islem_siparisleri_yazdir(islem);
+                    hataKodu = islem_siparisleri_yazdir(islem);
                     break;
                 case SIPARISLERI_YAZDIR_DOSYAYA:
-                    islem_siparisleri_yazdir_dosyaya(islem, bolumler[1]);
+                    hataKodu = islem_siparisleri_yazdir_dosyaya(islem, bolumler[1]);
                     break;
                 case CIKIS:
                     break;
+            }
+
+            if (hataKodu != 0) {
+                islem_hata_mesaji_yazdir(hataKodu);
+                printf("\n");
             }
         }
         string_dizisi_yok_et(bolumler, 5);

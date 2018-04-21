@@ -22,6 +22,17 @@ void islem_yoket(Islem islem) {
     free(islem);
 }
 
+static int islem_siparis_sayisi_al(Islem islem) {
+    size_t uzunluk = 0;
+    JRB gecici;
+
+    jrb_traverse(gecici, islem->jrb) {
+        uzunluk++;
+    }
+
+    return uzunluk;
+}
+
 int islem_siparis_ekle(Islem islem, Siparis *siparis) {
     jrb_insert_int(islem->jrb, siparis->anahtar, new_jval_v(siparis));
 }
@@ -69,6 +80,9 @@ int islem_siparis_ara(Islem islem, int anahtar, Siparis **siparis) {
 }
 
 int islem_siparisleri_yazdir(Islem islem) {
+    if (islem_siparis_sayisi_al(islem) < 1)
+        return ISLEM_SIPARIS_YOK;
+
     JRB gecici;
 
     jrb_traverse(gecici, islem->jrb) {
@@ -80,6 +94,9 @@ int islem_siparisleri_yazdir(Islem islem) {
 }
 
 int islem_siparisleri_yazdir_dosyaya(Islem islem, const char *dosyaAdi) {
+    if (islem_siparis_sayisi_al(islem) < 1)
+        return ISLEM_SIPARIS_YOK;
+
     JRB gecici;
     FILE *dosya = fopen(dosyaAdi, "w");
 
@@ -96,4 +113,22 @@ int islem_siparisleri_yazdir_dosyaya(Islem islem, const char *dosyaAdi) {
     fclose(dosya);
 
     return 0;
+}
+
+void islem_hata_mesaji_yazdir(int hataKodu) {
+    switch (hataKodu) {
+        case 0: /* Hata yok */
+            break;
+        case ISLEM_SIPARIS_BULUNAMADI:
+            fprintf(stderr, "Aranan siparis bulunamadi.");
+            break;
+        case ISLEM_DOSYA_ACILAMADI:
+            fprintf(stderr, "Dosyaya erisim basarisiz.");
+            break;
+        case ISLEM_SIPARIS_YOK:
+            fprintf(stderr, "Kayitli siparis yok.");
+            break;
+        default:
+            break;
+    }
 }

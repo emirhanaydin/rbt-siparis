@@ -7,6 +7,7 @@
 
 #define ISLEM_SIPARIS_BULUNAMADI (-200)
 #define ISLEM_DOSYA_ACILAMADI (-201)
+#define ISLEM_SIPARIS_YOK (-202)
 
 typedef struct islemstruct {
     JRB jrb;
@@ -27,5 +28,7 @@ extern int islem_siparis_ara(Islem islem, int anahtar, Siparis **siparis);
 extern int islem_siparisleri_yazdir(Islem islem);
 
 extern int islem_siparisleri_yazdir_dosyaya(Islem islem, const char *dosyaAdi);
+
+extern void islem_hata_mesaji_yazdir(int hataKodu);
 
 #endif //ISLEM_H
