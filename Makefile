@@ -1,7 +1,6 @@
 CC=gcc
-CFLAGS = -fPIC -Wall -Wextra -O2 -g
-LIBPATHS = -L./lib
-USERLIBS = -lfdr
+CFLAGS = -Wall -Wextra -O2 -g -std=gnu99
+USERLIBS = lib/libfdr.a
 BIN=bin
 INCL=include
 LIB=lib
@@ -11,10 +10,10 @@ TARGET=main
 all: compile run
 	
 compile: main.o komut.o islem.o siparis.o yardimci.o
-	$(CC) -o $(BIN)/$(TARGET) $(CFLAGS) $(LIB)/main.o $(LIB)/komut.o $(LIB)/islem.o $(LIB)/siparis.o $(LIB)/yardimci.o $(LIBPATHS) $(USERLIBS) 
+	$(CC) $(CFLAGS) $(LIB)/main.o $(LIB)/komut.o $(LIB)/islem.o $(LIB)/siparis.o $(LIB)/yardimci.o $(USERLIBS) -o $(BIN)/$(TARGET) 
 
 run:
-	$(BIN)/$(TARGET)
+	./$(BIN)/$(TARGET)
 	
 main.o: src/main.c include/komut.h include/islem.h include/jrb.h include/jval.h include/siparis.h include/yardimci.h
 	$(CC) -I $(INCL) -c $(SRC)/main.c -o $(LIB)/main.o
@@ -29,5 +28,5 @@ yardimci.o: src/yardimci.c
 
 .PHONY: clean
 clean:
-	DEL "$(BIN)\$(TARGET)"
-	DEL "$(LIB)\*.o"
+	rm -f $(BIN)/*
+	rm -f $(LIB)/*.o
