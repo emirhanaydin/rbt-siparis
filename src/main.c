@@ -4,7 +4,7 @@
 #include <mem.h>
 #include <yardimci.h>
 
-#define TAMPON_BOYUTU 256
+#define TAMPON_BOYUTU 256 /* Programın tamamında stringler için kullanılan tampon boyutudur. */
 
 int main() {
     char tampon[TAMPON_BOYUTU];
@@ -14,45 +14,47 @@ int main() {
     do {
         printf("> ");
 
-        if (fgets(tampon, sizeof(tampon), stdin) == NULL) {
+        if (fgets(tampon, TAMPON_BOYUTU, stdin) == NULL) {
             perror("Konsol girdisi okunamiyor.");
             exit(1);
         }
 
         size_t len = strlen(tampon);
-        if (len < 1) {
-            perror("Bos giris yapildi.");
-            exit(1);
-        }
-
         /* Sondaki satır sonu karakteri silinir. */
-        if (tampon[len - 1] == '\n') tampon[len - 1] = '\0';
+        if (tampon[len - 1] == '\n')
+            tampon[len - 1] = '\0';
 
-        char **bolumler = string_dizisi_olustur(5, TAMPON_BOYUTU);
-        int hataKodu = girdiyi_cozumle(tampon, bolumler, &komut);
+        /* Her bir bölüm girilen komutun bir dilimlik bölgesini tutar. */
+        char **girdi = string_dizisi_olustur(5, TAMPON_BOYUTU);
+
+        /* Kullanıcı girdisi yorumlanarak hangi komutun verildiği sonucu "komut"a atılır. */
+        int hataKodu = girdiyi_cozumle(tampon, girdi, &komut);
+
         if (hataKodu != 0) {
             hata_mesaji_yazdir(hataKodu);
             printf("\n");
         } else {
-            Siparis *siparis = siparis_doldur_yeni(TAMPON_BOYUTU, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
+            /* Girilen komut alanları yeni bir siparişe aktarılır. */
+            Siparis *siparis = siparis_doldur_yeni(TAMPON_BOYUTU, girdi[1], girdi[2], girdi[3], girdi[4]);
 
             switch (komut) {
                 case SIPARIS_EKLE:
                     hataKodu = islem_siparis_ekle(islem, siparis);
                     break;
                 case SIPARIS_EKLE_DOSYADAN:
-                    hataKodu = islem_siparis_ekle_dosyadan(islem, bolumler[1], TAMPON_BOYUTU);
+                    hataKodu = islem_siparis_ekle_dosyadan(islem, girdi[1], TAMPON_BOYUTU);
                     break;
                 case SIPARIS_ARA:
-                    hataKodu = islem_siparis_ara(islem, strtol(bolumler[1], NULL, 10), &siparis);
-                    if (hataKodu == 0)
+                    /* Arama sonucunda bulunan değer "siparis"e atılır. */
+                    hataKodu = islem_siparis_ara(islem, strtol(girdi[1], NULL, 10), &siparis);
+                    if (hataKodu == 0) /* Hata yoksa sipariş bilgileri ekrana yazdırılır. */
                         siparis_yazdir(*siparis);
                     break;
                 case SIPARISLERI_YAZDIR:
                     hataKodu = islem_siparisleri_yazdir(islem);
                     break;
                 case SIPARISLERI_YAZDIR_DOSYAYA:
-                    hataKodu = islem_siparisleri_yazdir_dosyaya(islem, bolumler[1]);
+                    hataKodu = islem_siparisleri_yazdir_dosyaya(islem, girdi[1]);
                     break;
                 case CIKIS:
                     break;
@@ -63,7 +65,7 @@ int main() {
                 printf("\n");
             }
         }
-        string_dizisi_yok_et(bolumler, 5);
+        string_dizisi_yok_et(girdi, 5);
     } while (komut != CIKIS);
 
     islem_yoket(islem);
