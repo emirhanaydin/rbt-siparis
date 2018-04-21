@@ -11,6 +11,12 @@ Islem islem_olustur() {
 }
 
 void islem_yoket(Islem islem) {
+    JRB gecici;
+
+    jrb_traverse(gecici, islem->jrb) {
+        siparis_yoket(gecici->val.v);
+    }
+
     jrb_free_tree(islem->jrb);
 
     free(islem);
