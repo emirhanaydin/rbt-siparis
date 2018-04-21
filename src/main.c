@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <komut.h>
-#include <mem.h>
-#include <yardimci.h>
+#include <string.h>
+#include "komut.h"
+#include "yardimci.h"
 
 #define TAMPON_BOYUTU 256 /* Programın tamamında stringler için kullanılan tampon boyutudur. */
 

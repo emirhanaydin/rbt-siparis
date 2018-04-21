@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <ctype.h>
-#include <mem.h>
 #include "komut.h"
 
 static int sayi_mi(const char *girdi) {

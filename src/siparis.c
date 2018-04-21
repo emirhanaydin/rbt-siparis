@@ -1,7 +1,8 @@
-#include <siparis.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <malloc.h>
-#include <mem.h>
+#include "siparis.h"
 
 Siparis *siparis_olustur(size_t tamponBoyutu) {
     Siparis *siparis = malloc(sizeof(Siparis));
