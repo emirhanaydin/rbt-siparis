@@ -8,8 +8,9 @@
 #define ISLEM_TAMPON_BOYUTU 256
 
 #define ISLEM_SIPARIS_BULUNAMADI (-200)
+#define ISLEM_DOSYA_OKUNAMIYOR (-201)
 
-typedef struct {
+typedef struct islemstruct {
     JRB jrb;
     Siparis **siparisler;
     int adet;
@@ -24,7 +25,7 @@ extern void islem_yoket(Islem islem);
 
 extern int islem_siparis_ekle(Islem islem, const char *anahtar, const char *ad, const char *malzeme, const char *renk);
 
-extern int islem_ekle_dosyadan(Islem islem, const char *dosyaAdi);
+extern int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi);
 
 extern int islem_siparis_ara(Islem islem, int anahtar, Siparis **siparis);
 

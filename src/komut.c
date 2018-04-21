@@ -67,18 +67,15 @@ int komut_siparis_ekle_kontrol(const char *anahtar) {
     return 0;
 }
 
-int komut_siparis_ekle_dosyadan(const char *girdi, Islem kayit) {
+int komut_siparis_ekle_dosyadan(const char *girdi, Islem islem) {
     char *bosluksuz = strdup(girdi);
+    int r = 0;
 
-    if (bosluklari_sil(bosluksuz) < 5 || bosluksuz[3] != '<') {
-        free(bosluksuz);
-        return KOMUT_HATALI_PRO;
-    }
-
-    islem_ekle_dosyadan(kayit, &bosluksuz[4]);
+    if (bosluklari_sil(bosluksuz) < 5 || strchr(bosluksuz, '<') - bosluksuz < 3)
+        r = KOMUT_HATALI_PRO;
 
     free(bosluksuz);
-    return 0;
+    return r;
 }
 
 int komut_siparis_ara_kontrol(const char *anahtar) {
@@ -133,7 +130,7 @@ int girdiyi_cozumle(const char *girdi, Islem kayit, char **bolumler, int *bolumS
     } else if (memcmp(bolumler[0], KOMUT_PRO, 3) == 0) {
         if (*bolumSayisi != 1) return KOMUT_HATALI_PRO;
 
-        r = komut_siparis_ekle_dosyadan(bolumler[0], kayit) != 0;
+        r = komut_siparis_ekle_dosyadan(bolumler[0], kayit);
         *secilenKomut = SIPARIS_EKLE_DOSYADAN;
     } else if (strcmp(bolumler[0], KOMUT_SEARCH) == 0) {
         if (*bolumSayisi != 2) return KOMUT_HATALI_SEARCH;
