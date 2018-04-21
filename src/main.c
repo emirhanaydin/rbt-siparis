@@ -38,10 +38,12 @@ int main() {
             continue;
         }
 
-        Siparis *siparis;
+        Siparis *siparis = siparis_olustur(TAMPON_BOYUTU);
+        siparis_doldur(siparis, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
+
         switch (komut) {
             case SIPARIS_EKLE:
-                islem_siparis_ekle(islem, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
+                islem_siparis_ekle(islem, siparis);
                 break;
             case SIPARIS_EKLE_DOSYADAN:
                 islem_siparis_ekle_dosyadan(islem, "giris.txt");
@@ -57,6 +59,8 @@ int main() {
             case CIKIS:
                 break;
         }
+
+        siparis_yoket(siparis);
     } while (komut != CIKIS);
 
     islem_yoket(islem);
