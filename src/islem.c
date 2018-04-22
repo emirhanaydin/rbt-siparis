@@ -1,5 +1,6 @@
 #include <malloc.h>
 #include <fields.h>
+#include <siparis.h>
 #include "islem.h"
 #include "komut.h"
 #include "yardimci.h"
@@ -21,6 +22,10 @@ void islem_yoket(Islem islem) {
     free(islem);
 }
 
+static int siparis_var_mi(Islem islem, int anahtar) {
+    return jrb_find_int(islem->jrb, anahtar) != NULL;
+}
+
 static size_t islem_siparis_sayisi_al(Islem islem) {
     size_t uzunluk = 0;
     JRB gecici;
@@ -33,6 +38,9 @@ static size_t islem_siparis_sayisi_al(Islem islem) {
 }
 
 int islem_siparis_ekle(Islem islem, Siparis *siparis) {
+    if (siparis_var_mi(islem, siparis->anahtar))
+        return ISLEM_ANAHTAR_ZATEN_VAR;
+
     jrb_insert_int(islem->jrb, siparis->anahtar, new_jval_v(siparis));
 
     return 0;
@@ -60,7 +68,12 @@ int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tampon
         }
 
         Siparis *siparis = siparis_doldur_yeni(tamponBoyutu, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
-        islem_siparis_ekle(islem, siparis);
+
+        int r = islem_siparis_ekle(islem, siparis);
+        if (r != ISLEM_ANAHTAR_ZATEN_VAR) {
+            islem_hata_mesaji_yazdir(r);
+            printf("\n");
+        }
     }
 
     string_dizisi_yok_et(bolumler, 5);
@@ -128,6 +141,9 @@ void islem_hata_mesaji_yazdir(int hataKodu) {
             break;
         case ISLEM_SIPARIS_YOK:
             fprintf(stderr, "Kayitli siparis yok.");
+            break;
+        case ISLEM_ANAHTAR_ZATEN_VAR:
+            fprintf(stderr, "Girilen anahtar degerine sahip bir siparis onceden eklenmis.");
             break;
         default:
             break;

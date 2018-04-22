@@ -46,7 +46,7 @@ int main() {
                     break;
                 case SIPARIS_ARA:
                     /* Arama sonucunda bulunan değer "siparis"e atılır. */
-                    hataKodu = islem_siparis_ara(islem, strtol(girdi[1], NULL, 10), &siparis);
+                    hataKodu = islem_siparis_ara(islem, (int) strtol(girdi[1], NULL, 10), &siparis);
                     if (hataKodu == 0) /* Hata yoksa sipariş bilgileri ekrana yazdırılır. */
                         siparis_yazdir(*siparis);
                     break;
