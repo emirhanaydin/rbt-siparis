@@ -8,8 +8,13 @@
 
 int main() {
     char tampon[TAMPON_BOYUTU];
-    Islem islem = islem_olustur();
     enum Komut komut;
+
+    /* RBT işlemleri için kullanılır. */
+    Islem islem = islem_olustur();
+
+    /* Her bir bölüm girilen komutun bir dilimlik bölgesini tutar. */
+    char **girdi = string_dizisi_olustur(5, TAMPON_BOYUTU);
 
     do {
         printf("> ");
@@ -23,9 +28,6 @@ int main() {
         /* Sondaki satır sonu karakteri silinir. */
         if (tampon[len - 1] == '\n')
             tampon[len - 1] = '\0';
-
-        /* Her bir bölüm girilen komutun bir dilimlik bölgesini tutar. */
-        char **girdi = string_dizisi_olustur(5, TAMPON_BOYUTU);
 
         /* Kullanıcı girdisi yorumlanarak hangi komutun verildiği sonucu "komut"a atılır. */
         int hataKodu = girdiyi_cozumle(tampon, girdi, &komut);
@@ -65,9 +67,9 @@ int main() {
                 printf("\n");
             }
         }
-        string_dizisi_yok_et(girdi, 5);
     } while (komut != CIKIS);
 
+    string_dizisi_yok_et(girdi, 5);
     islem_yoket(islem);
 
     exit(0);
