@@ -1,5 +1,4 @@
 #include <malloc.h>
-#include <stdio.h>
 #include <fields.h>
 #include "islem.h"
 #include "komut.h"
@@ -22,7 +21,7 @@ void islem_yoket(Islem islem) {
     free(islem);
 }
 
-static int islem_siparis_sayisi_al(Islem islem) {
+static size_t islem_siparis_sayisi_al(Islem islem) {
     size_t uzunluk = 0;
     JRB gecici;
 
