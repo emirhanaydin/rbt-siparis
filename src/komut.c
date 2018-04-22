@@ -39,11 +39,11 @@ static int gereksiz_bosluklari_temizle(char *girdi) {
         if (girdi[ilk] != ' ') break;
     }
 
-    for (son = boyut - 1; son > 0; son--) {
+    for (son = (int) (boyut - 1); son > 0; son--) {
         if (girdi[son] != ' ') break;
     }
 
-    size_t sonBoyut = (size_t) (son - ilk + 1);
+    size_t sonBoyut = (size_t) son - ilk + 1;
     char *gecici = malloc(sizeof(char) * boyut);
 
     for (int i = 0; i < sonBoyut; i++) {
@@ -54,7 +54,7 @@ static int gereksiz_bosluklari_temizle(char *girdi) {
     girdi[sonBoyut] = '\0';
 
     free(gecici);
-    return sonBoyut;
+    return (int) sonBoyut;
 }
 
 int komut_siparis_ekle_kontrol(const char *anahtar) {

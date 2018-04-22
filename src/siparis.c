@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <malloc.h>
 #include "siparis.h"
 
 Siparis *siparis_olustur(size_t tamponBoyutu) {
@@ -24,7 +23,7 @@ void siparis_yoket(Siparis *siparis) {
 }
 
 void siparis_doldur(Siparis *siparis, const char *anahtar, const char *ad, const char *malzeme, const char *renk) {
-    siparis->anahtar = strtol(anahtar, NULL, 10);
+    siparis->anahtar = (int) strtol(anahtar, NULL, 10);
     strcpy(siparis->ad, ad);
     strcpy(siparis->malzeme, malzeme);
     strcpy(siparis->renk, renk);
