@@ -7,6 +7,10 @@ Proje Çalışması
 
 21.04.2018
 
+ÖNEMLİ: Programın derlenebilmesi için libfdr.a dosyası lib dizininde bulunmalıdır.
+Bkz: https://bitbucket.org/jimplank/cs360-lecture-notes/src/139bd33f7f29/Libfdr/
+
+
 Program, standart girişten verilen komutlara göre 5 farklı işlem yapar:
 
 
