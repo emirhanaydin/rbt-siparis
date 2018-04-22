@@ -70,7 +70,7 @@ int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tampon
         Siparis *siparis = siparis_doldur_yeni(tamponBoyutu, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
 
         int r = islem_siparis_ekle(islem, siparis);
-        if (r != ISLEM_ANAHTAR_ZATEN_VAR) {
+        if (r != 0) {
             islem_hata_mesaji_yazdir(r);
             printf("\n");
         }
