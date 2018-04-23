@@ -9,6 +9,7 @@
 #define ISLEM_DOSYA_ACILAMADI (-201)
 #define ISLEM_SIPARIS_YOK (-202)
 #define ISLEM_ANAHTAR_ZATEN_VAR (-203)
+#define ISLEM_DOSYA_ICERIGI_GECERSIZ (-204)
 
 typedef struct islemstruct {
     JRB jrb;

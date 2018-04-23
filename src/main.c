@@ -45,12 +45,15 @@ int main() {
                 hataKodu = islem_siparis_ekle(islem, siparis);
 
                 if (hataKodu == 0)
-                    printf("Siparis eklendi.\n");
+                    printf("\nSiparis eklendi.\n");
                 else
                     siparis_yoket(siparis);
                 break;
             case SIPARIS_EKLE_DOSYADAN:
                 hataKodu = islem_siparis_ekle_dosyadan(islem, girdi[1], TAMPON_BOYUTU);
+
+                if (hataKodu == 0)
+                    printf("\nSiparisler dosyadan okundu.\n");
                 break;
             case SIPARIS_ARA:
                 /* Arama sonucunda bulunan değer "siparis"e atılır. */
@@ -65,7 +68,7 @@ int main() {
                 hataKodu = islem_siparisleri_yazdir_dosyaya(islem, girdi[1]);
 
                 if (hataKodu == 0)
-                    printf("Siparisler dosyaya yazildi.\n");
+                    printf("\nSiparisler dosyaya yazildi.\n");
                 break;
             case CIKIS:
                 break;

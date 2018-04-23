@@ -1,6 +1,7 @@
 #include <malloc.h>
 #include <fields.h>
 #include <siparis.h>
+#include <memory.h>
 #include "islem.h"
 #include "komut.h"
 #include "yardimci.h"
@@ -54,6 +55,8 @@ int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tampon
 
     char **bolumler = string_dizisi_olustur(5, tamponBoyutu);
 
+    size_t okunanSayisi = 0; /* Eğer hiçbir kayıt okunmamışsa hata değeri döndürmek için. */
+    char sonEk[tamponBoyutu]; /* Hata mesajına anahtarı dahil etmek için. */
     while (get_line(is) >= 0) {
         enum Komut komut;
         int hataKodu = girdiyi_cozumle(is->text1, bolumler, &komut);
@@ -69,11 +72,22 @@ int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tampon
 
         Siparis *siparis = siparis_doldur_yeni(tamponBoyutu, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
 
-        islem_hata_mesaji_yazdir(islem_siparis_ekle(islem, siparis), "\n", "\n");
+        hataKodu = islem_siparis_ekle(islem, siparis);
+        if (hataKodu != 0) {
+            memcpy(sonEk, " (", 2);
+            strcpy(sonEk + 2, bolumler[1]);
+            memcpy(sonEk + strlen(sonEk), ")\n\0", 3);
+
+            islem_hata_mesaji_yazdir(islem_siparis_ekle(islem, siparis), NULL, sonEk);
+        } else
+            okunanSayisi++;
     }
 
     string_dizisi_yok_et(bolumler, 5);
     jettison_inputstruct(is);
+
+    if (okunanSayisi < 1)
+        return ISLEM_DOSYA_ICERIGI_GECERSIZ;
 
     return 0;
 }
@@ -142,6 +156,9 @@ void islem_hata_mesaji_yazdir(int hataKodu, const char *onEk, const char *sonEk)
             break;
         case ISLEM_ANAHTAR_ZATEN_VAR:
             fprintf(stderr, "Girilen anahtar degerine sahip bir siparis onceden eklenmis.");
+            break;
+        case ISLEM_DOSYA_ICERIGI_GECERSIZ:
+            fprintf(stderr, "Dosyada gecerli bir siparis bulunamadi.");
             break;
         default:
             break;
