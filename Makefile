@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS = -Wall -Wextra -O2 -g -std=gnu99
+CFLAGS = -Wall -Wextra -O2 -g
 LIBPATH = -Llib
 USERLIBS = -lfdr
 BIN=bin
