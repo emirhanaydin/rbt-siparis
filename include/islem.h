@@ -30,6 +30,6 @@ extern int islem_siparisleri_yazdir(Islem islem);
 
 extern int islem_siparisleri_yazdir_dosyaya(Islem islem, const char *dosyaAdi);
 
-extern void islem_hata_mesaji_yazdir(int hataKodu);
+extern void islem_hata_mesaji_yazdir(int hataKodu, const char *onEk, const char *sonEk);
 
 #endif //ISLEM_H

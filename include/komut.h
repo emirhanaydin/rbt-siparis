@@ -33,6 +33,6 @@ enum Komut {
 
 extern int girdiyi_cozumle(const char *girdi, char **bolumler, enum Komut *secilenKomut);
 
-extern void hata_mesaji_yazdir(int hata_kodu);
+extern void komut_hata_mesaji_yazdir(int hataKodu, const char *onEk, const char *sonEk);
 
 #endif //KOMUT_H

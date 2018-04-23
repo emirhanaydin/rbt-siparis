@@ -69,11 +69,7 @@ int islem_siparis_ekle_dosyadan(Islem islem, const char *dosyaAdi, size_t tampon
 
         Siparis *siparis = siparis_doldur_yeni(tamponBoyutu, bolumler[1], bolumler[2], bolumler[3], bolumler[4]);
 
-        int r = islem_siparis_ekle(islem, siparis);
-        if (r != 0) {
-            islem_hata_mesaji_yazdir(r);
-            printf("\n");
-        }
+        islem_hata_mesaji_yazdir(islem_siparis_ekle(islem, siparis), "\n", "\n");
     }
 
     string_dizisi_yok_et(bolumler, 5);
@@ -129,10 +125,12 @@ int islem_siparisleri_yazdir_dosyaya(Islem islem, const char *dosyaAdi) {
     return 0;
 }
 
-void islem_hata_mesaji_yazdir(int hataKodu) {
+void islem_hata_mesaji_yazdir(int hataKodu, const char *onEk, const char *sonEk) {
+    if (hataKodu == 0) return;
+
+    if (onEk != NULL) printf("%s", onEk);
+
     switch (hataKodu) {
-        case 0: /* Hata yok */
-            break;
         case ISLEM_SIPARIS_BULUNAMADI:
             fprintf(stderr, "Aranan siparis bulunamadi.");
             break;
@@ -148,4 +146,6 @@ void islem_hata_mesaji_yazdir(int hataKodu) {
         default:
             break;
     }
+
+    if (sonEk != NULL) printf("%s", sonEk);
 }

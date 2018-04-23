@@ -156,11 +156,14 @@ int girdiyi_cozumle(const char *girdi, char **bolumler, enum Komut *secilenKomut
     return r;
 }
 
-void hata_mesaji_yazdir(int hata_kodu) {
-    const char *komut_hata = "komutunu hatali kullandiniz. \nKullanim\n  ";
+void komut_hata_mesaji_yazdir(int hataKodu, const char *onEk, const char *sonEk) {
+    if (hataKodu == 0) return;
 
-    switch (hata_kodu) {
-        case 0: /* Hata yok */
+    const char *komut_hata = "komutunu hatali kullandiniz. \n\nKullanim\n\n  ";
+
+    if (onEk != NULL) printf("%s", onEk);
+
+    switch (hataKodu) {
         case KOMUT_SONLANDIR: /* Hata yok */
             break;
         case KOMUT_HATALI_GIRDI:
@@ -190,4 +193,6 @@ void hata_mesaji_yazdir(int hata_kodu) {
         default:
             break;
     }
+
+    if (sonEk != NULL) printf("%s", sonEk);
 }
