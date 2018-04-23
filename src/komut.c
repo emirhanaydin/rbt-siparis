@@ -1,14 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include "komut.h"
 
 static int sayi_mi(const char *girdi) {
     int i;
 
     for (i = 0; i < 12 && girdi[i] != '\0'; i++) {
-        if (!isdigit(girdi[i]))
+        if (girdi[i] < '0' || girdi[i] > '9')
             return 0;
     }
     if (i > 11) return 0;

@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include "siparis.h"
 
 Siparis *siparis_olustur(size_t tamponBoyutu) {

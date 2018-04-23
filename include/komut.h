@@ -1,6 +1,7 @@
 #ifndef KOMUT_H
 #define KOMUT_H
 
+#include <stdint.h>
 #include "islem.h"
 #include "siparis.h"
 

@@ -1,7 +1,9 @@
 #ifndef SIPARIS_H
 #define SIPARIS_H
 
-#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 typedef struct {
     int anahtar;

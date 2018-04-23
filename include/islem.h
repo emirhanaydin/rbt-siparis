@@ -1,9 +1,11 @@
 #ifndef ISLEM_H
 #define ISLEM_H
 
-#include <stdint.h>
-#include <jrb.h>
+#include "jrb.h"
+#include "fields.h"
 #include "siparis.h"
+#include "komut.h"
+#include "yardimci.h"
 
 #define ISLEM_SIPARIS_BULUNAMADI (-200)
 #define ISLEM_DOSYA_ACILAMADI (-201)

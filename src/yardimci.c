@@ -1,4 +1,4 @@
-#include <malloc.h>
+#include "yardimci.h"
 
 char **string_dizisi_olustur(size_t uzunluk, size_t tamponBoyutu) {
     char **dizi = malloc(sizeof(char *) * uzunluk);

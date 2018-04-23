@@ -1,10 +1,4 @@
-#include <malloc.h>
-#include <fields.h>
-#include <siparis.h>
-#include <memory.h>
 #include "islem.h"
-#include "komut.h"
-#include "yardimci.h"
 
 Islem islem_olustur() {
     Islem islem = malloc(sizeof(struct islemstruct));
