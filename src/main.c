@@ -44,7 +44,10 @@ int main() {
                 siparis = siparis_doldur_yeni(TAMPON_BOYUTU, girdi[1], girdi[2], girdi[3], girdi[4]);
                 hataKodu = islem_siparis_ekle(islem, siparis);
 
-                if (hataKodu != 0) siparis_yoket(siparis);
+                if (hataKodu == 0)
+                    printf("Siparis eklendi.\n");
+                else
+                    siparis_yoket(siparis);
                 break;
             case SIPARIS_EKLE_DOSYADAN:
                 hataKodu = islem_siparis_ekle_dosyadan(islem, girdi[1], TAMPON_BOYUTU);
@@ -60,6 +63,9 @@ int main() {
                 break;
             case SIPARISLERI_YAZDIR_DOSYAYA:
                 hataKodu = islem_siparisleri_yazdir_dosyaya(islem, girdi[1]);
+
+                if (hataKodu == 0)
+                    printf("Siparisler dosyaya yazildi.\n");
                 break;
             case CIKIS:
                 break;
