@@ -1,6 +1,7 @@
 CC=gcc
 CFLAGS = -Wall -Wextra -O2 -g -std=gnu99
-USERLIBS = lib/libfdr.a
+LIBPATH = -Llib
+USERLIBS = -lfdr
 BIN=bin
 INCL=include
 LIB=lib
@@ -10,7 +11,7 @@ TARGET=main
 all: mkbin compile run
 	
 compile: main.o komut.o islem.o siparis.o yardimci.o
-	$(CC) $(CFLAGS) $(LIB)/main.o $(LIB)/komut.o $(LIB)/islem.o $(LIB)/siparis.o $(LIB)/yardimci.o $(USERLIBS) -o $(BIN)/$(TARGET) 
+	$(CC) $(CFLAGS) $(LIBPATH) $(LIB)/main.o $(LIB)/komut.o $(LIB)/islem.o $(LIB)/siparis.o $(LIB)/yardimci.o $(USERLIBS) -o $(BIN)/$(TARGET) 
 
 run: 
 	clear
